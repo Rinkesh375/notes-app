@@ -1,0 +1,91 @@
+############################################################
+# 🐳 Docker Compose Configuration — Fullstack App
+############################################################
+
+
+# ------------------------------------------------------------
+# Version of docker-compose file format
+# ------------------------------------------------------------
+version: "3.9"  # Modern Docker Compose version supporting build args, depends_on, etc.
+
+# ------------------------------------------------------------
+# Services Section
+# ------------------------------------------------------------
+services:
+
+  # -------------------------------
+  # Backend / Express Server
+  # -------------------------------
+  server:
+    build: ./server                 # Build Docker image from ./server folder Dockerfile
+    image: express-server:1.0       # Custom image name and tag
+    container_name: express-server  # Assign a custom container name (instead of random)
+    ports:
+      - "4000:4000"                 # Map host port 4000 → container port 4000
+    networks:
+      - fullstack-network           # Connect backend to custom network
+    restart: unless-stopped         # Restart container automatically unless manually stopped
+    volumes:
+      - ./server:/app               # Mount local server folder for live reload in development
+    environment:
+      NODE_ENV: development         # Set environment variable inside container
+
+  # -------------------------------
+  # Frontend / React Client
+  # -------------------------------
+  client:
+    build:
+      context: ./client                              # Path to client Dockerfile
+      args:
+        VITE_SERVER_URL: ${VITE_SERVER_URL}          # Build-time argument from .env
+        VITE_RAZORPAY_KEY_ID: ${VITE_RAZORPAY_KEY_ID} # Optional build-time argument
+        VITE_GA_ID: ${VITE_GA_ID}                    # Optional build-time argument
+    image: react-client:1.0                          # Custom image name and tag
+    container_name: react-client
+    ports:
+      - "3000:3000"                                  # Map host port 3000 → container port 3000
+    networks:
+      - fullstack-network                            # Connect frontend to the same network as backend
+    restart: unless-stopped                          # Restart policy
+    depends_on:
+      - server                                       # Ensure server starts before client
+    environment:
+      VITE_SERVER_URL: ${VITE_SERVER_URL}            # Runtime env inside container
+      VITE_RAZORPAY_KEY_ID: ${VITE_RAZORPAY_KEY_ID}  # Runtime env
+      VITE_GA_ID: ${VITE_GA_ID}                      # Runtime env
+
+# ------------------------------------------------------------
+# Network Configuration
+# ------------------------------------------------------------
+networks:
+  fullstack-network:
+    driver: bridge                  # Use Docker bridge network (isolated private network)
+
+# ------------------------------------------------------------
+# Notes / Tips:
+# ------------------------------------------------------------
+# 1️⃣ .env file usage:
+#    - Create a .env file in the root folder with:
+#      VITE_SERVER_URL=http://localhost:4000
+#      VITE_RAZORPAY_KEY_ID=dummyKey
+#      VITE_GA_ID=G-dummy
+#
+# 2️⃣ Build-time vs runtime variables:
+#    - ARG in Dockerfile → only available during image build
+#    - ENV in Dockerfile / environment in compose → available inside container at runtime
+#
+# 3️⃣ depends_on currently only ensures startup order.
+#    - Healthchecks can be added later for readiness control.
+#
+# 4️⃣ Running the app:
+#    - docker-compose up -d --build  # Build images and start containers in background
+#    - docker-compose down            # Stop and remove containers
+#    - docker-compose logs -f         # View live logs of all services
+#
+# 5️⃣ Live reload in development:
+#    - Volumes mount local code into container, so changes reflect immediately
+#
+# 6️⃣ Network:
+#    - Both frontend and backend share `fullstack-network`, so frontend can access backend using container name
+#      e.g., in client code: http://express-server:4000
+############################################################
