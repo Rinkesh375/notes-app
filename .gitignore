@@ -1,0 +1,48 @@
+# Node modules
+client/node_modules/
+server/node_modules/
+
+# Builds
+client/build/
+server/dist/
+
+# Environment files
+*.env
+*.env.*
+client/.env*
+server/.env*
+!*.env-sample
+!client/.env-sample
+!server/.env-sample
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cache / framework files
+.next/
+.vercel/
+.cache/
+
+# Optional
+uploads/
+temp/
+storage/
+
