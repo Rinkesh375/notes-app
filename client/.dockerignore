@@ -1,0 +1,38 @@
+# 🧩 Dependency folders (very large, not needed)
+node_modules
+bower_components
+
+# ⚙️ Build output (will be generated inside the container)
+dist
+.build
+.next
+out
+
+# 🧠 Config & Local environment files
+# ignore all environment files like .env.local, .env.production etc.
+# ❗ keep sample env for reference this .env.example won't be ignored
+.env
+.env.*        
+!*.env.example 
+
+# 🧾 Logs and debug files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 🧰 System & IDE files
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+*.swp
+
+# 🧑‍💻 Git-related
+.git
+.gitignore
+
+# 🏗️ Docker-related
+Dockerfile
+.dockerignore
+
+

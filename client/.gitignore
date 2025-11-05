@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# 🧠 Config & Local environment files
+# ignore all environment files like .env.local, .env.production etc.
+# ❗ keep sample env for reference this .env.example won't be ignored
+.env
+.env.*        
+!*.env.example 
