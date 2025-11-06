@@ -62,7 +62,7 @@ networks:
     driver: bridge                  # Use Docker bridge network (isolated private network)
 
 # ------------------------------------------------------------
-# Notes / Tips:
+# Notes / Tips
 # ------------------------------------------------------------
 # 1️⃣ .env file usage:
 #    - Create a .env file in the root folder with:
